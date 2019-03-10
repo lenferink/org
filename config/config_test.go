@@ -225,10 +225,9 @@ func TestAllOrgs(t *testing.T) {
 			t.Errorf("users in both org admin and member roles: %s", strings.Join(both.List(), ", "))
 		}
 
-		// TODO (rlenferink) re-enable for bots
-		//if !admins.Has("k8s-ci-robot") {
-		//	t.Errorf("k8s-ci-robot must be an admin")
-		//}
+		if !admins.Has("rlenferink-bot") {
+			t.Errorf("rlenferink-bot must be an admin")
+		}
 
 		if org.BillingEmail != nil {
 			t.Errorf("billing_email must be unset")
