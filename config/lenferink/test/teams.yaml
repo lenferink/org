@@ -1,0 +1,13 @@
+teams:
+  test-admins:
+    description: ""
+    maintainers:
+    - rlenferink
+    privacy: closed
+  test-maintainers:
+    description: ""
+    maintainers:
+    - rlenferink
+    members:
+    - rlenferink-test
+    privacy: closed

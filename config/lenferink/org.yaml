@@ -1,0 +1,10 @@
+name: Lenferink
+description: Lenferink
+default_repository_permission: read
+has_organization_projects: true
+has_repository_projects: true
+members_can_create_repositories: false
+admins:
+- rlenferink
+members:
+- rlenferink-test
