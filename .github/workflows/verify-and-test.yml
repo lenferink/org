@@ -13,17 +13,17 @@ jobs:
     steps:
     - name: Checkout source code
       uses: actions/checkout@master
+    - uses: actions/setup-go@v2-beta
+      with:
+        go-version: '^1.14.0' # The Go version to download (if necessary) and use.
+    - name: GOOO
+      run: |
+        echo $GOPATH
     - name: Install packages
       run: |
-        # Install Go
-        sudo add-apt-repository ppa:longsleep/golang-backports
-        sudo apt update
-        sudo apt install golang-go
-        sudo mkdir $GOPATH
-        export PATH=$GOPATH/bin:$PATH
         # Setup Go environment
-        mkdir -p $GOPATH/src/$(dirname $REPO_NAME)
-        ln -svf $CI_PROJECT_DIR $GOPATH/src/$REPO_NAME
+        sudo mkdir -p $GOPATH/src/$(dirname $REPO_NAME)
+        sudo ln -svf $CI_PROJECT_DIR $GOPATH/src/$REPO_NAME
         cd $GOPATH/src/$REPO_NAME
         # Store GitHub token
         echo -e "$GH_TOKEN" > /tmp/token.gh
