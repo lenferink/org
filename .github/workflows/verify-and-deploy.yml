@@ -44,6 +44,6 @@ jobs:
     - name: Verify
       run: ./hack/verify-all.sh
     - name: Deploy
-      run: bazel run //admin:update -- --github-token-path /tmp/token.gh --confirm
+      run: bash -c "bazel run //admin:update -- --github-token-path /tmp/token.gh --confirm"
 
 #TODO: Add test 
