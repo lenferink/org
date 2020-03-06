@@ -8,6 +8,7 @@ jobs:
     env:
       BAZEL_VERSION: 1.2.1
       REPO_NAME: github.com/lenferink/org
+      GOPATH: /go
     timeout-minutes: 60
     steps:
     - name: Checkout source code
@@ -22,7 +23,7 @@ jobs:
       run: |
         # Setup Go environment
         sudo mkdir -p $GOPATH/src/$(dirname $REPO_NAME)
-        sudo ln -svf $CI_PROJECT_DIR $GOPATH/src/$REPO_NAME
+        sudo ln -svf $GITHUB_WORKSPACE/org $GOPATH/src/$REPO_NAME
         cd $GOPATH/src/$REPO_NAME
         # Store GitHub token
         echo -e "$GH_TOKEN" > /tmp/token.gh
