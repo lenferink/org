@@ -1,6 +1,6 @@
 name: config
 
-on: [pull_request]
+on: [push]
 
 jobs:
   verify:
@@ -37,5 +37,7 @@ jobs:
         sudo ln -s /usr/bin/python3 /usr/bin/python
     - name: Verify
       run: ./hack/verify-all.sh
+    - name: Deploy
+      run: bazel run //admin:update -- --github-token-path /tmp/token.gh --confirm
 
 #TODO: Add test 
