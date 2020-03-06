@@ -21,8 +21,13 @@ jobs:
         echo $GOPATH
     - name: Install packages
       run: |
+        echo "PWD"
+        pwd
+        echo "LS"
+        ls
         # Setup Go environment
         sudo mkdir -p $GOPATH/src/$(dirname $REPO_NAME)
+        ls -l $GOPATH/src/$(dirname $REPO_NAME)
         sudo ln -svf $GITHUB_WORKSPACE/org $GOPATH/src/$REPO_NAME
         cd $GOPATH/src/$REPO_NAME
         # Store GitHub token
