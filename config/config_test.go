@@ -1,5 +1,6 @@
 /*
 Copyright 2018 The Kubernetes Authors.
+Copyright 2020 Thales Group
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -25,44 +26,11 @@ import (
 	"testing"
 
 	"k8s.io/apimachinery/pkg/util/sets"
-	"k8s.io/test-infra/prow/config"
 	"k8s.io/test-infra/prow/config/org"
 	"k8s.io/test-infra/prow/github"
 
 	"github.com/ghodss/yaml"
 )
-
-type owners struct {
-	Reviewers []string `json:"reviewers,omitempty"`
-	Approvers []string `json:"approvers"`
-}
-
-func readInto(path string, i interface{}) error {
-	buf, err := ioutil.ReadFile(path)
-	if err != nil {
-		return fmt.Errorf("read: %v", err)
-	}
-	if err := yaml.Unmarshal(buf, i); err != nil {
-		return fmt.Errorf("unmarshal: %v", err)
-	}
-	return nil
-}
-
-func loadOwners(dir string) (*owners, error) {
-	var own owners
-	if err := readInto(dir+"/OWNERS", &own); err != nil {
-		return nil, err
-	}
-	return &own, nil
-}
-
-func loadOrg(dir string) (*org.Config, error) {
-	var cfg org.Config
-	if err := readInto(dir+"/org.yaml", &cfg); err != nil {
-		return nil, err
-	}
-	return &cfg, nil
-}
 
 func testDuplicates(list sets.String) error {
 	found := sets.String{}
@@ -151,45 +119,10 @@ func testTeamMembers(teams map[string]org.Team, admins sets.String, orgMembers s
 	return errs
 }
 
-func testOrg(targetDir string, t *testing.T) {
-	cfg, err := loadOrg(targetDir)
-	if err != nil {
-		t.Fatalf("failed to load org.yaml: %v", err)
-	}
-	own, err := loadOwners(targetDir)
-	if err != nil {
-		t.Fatalf("failed to load OWNERS: %v", err)
-	}
-
-	members := normalize(sets.NewString(cfg.Members...))
-	admins := normalize(sets.NewString(cfg.Admins...))
-	allOrgMembers := members.Union(admins)
-
-	reviewers := normalize(sets.NewString(own.Reviewers...))
-	approvers := normalize(sets.NewString(own.Approvers...))
-
-	// TODO (rlenferink) re-enable when enough OWNERS
-	//if n := len(approvers); n < 5 {
-	//	t.Errorf("Require at least 5 approvers, found %d: %s", n, strings.Join(approvers.List(), ", "))
-	//}
-
-	if missing := reviewers.Difference(allOrgMembers); len(missing) > 0 {
-		t.Errorf("The following reviewers must be members: %s", strings.Join(missing.List(), ", "))
-	}
-	if missing := approvers.Difference(allOrgMembers); len(missing) > 0 {
-		t.Errorf("The following approvers must be members: %s", strings.Join(missing.List(), ", "))
-	}
-	if err := testDuplicates(reviewers); err != nil {
-		t.Errorf("duplicate reviewers: %v", err)
-	}
-	if err := testDuplicates(approvers); err != nil {
-		t.Errorf("duplicate approvers: %v", err)
-	}
-}
-
 func TestAllOrgs(t *testing.T) {
-	cfg, err := config.Load("config.yaml", "")
-	if err != nil {
+	raw, err := ioutil.ReadFile("config.yaml")
+	var cfg org.FullConfig
+	if err := yaml.Unmarshal(raw, &cfg); err != nil {
 		t.Fatalf("cannot read config.yaml from //config:gen-config.yaml: %v", err)
 	}
 	f, err := os.Open(".")
@@ -212,7 +145,6 @@ func TestAllOrgs(t *testing.T) {
 			if _, ok := cfg.Orgs[n]; !ok {
 				t.Errorf("%s missing from generated config.yaml", n)
 			}
-			testOrg(n, t)
 		})
 	}
 
@@ -222,15 +154,11 @@ func TestAllOrgs(t *testing.T) {
 		allOrgMembers := members.Union(admins)
 
 		if both := admins.Intersection(members); len(both) > 0 {
-			t.Errorf("users in both org admin and member roles: %s", strings.Join(both.List(), ", "))
+			t.Errorf("users in both org admin and member roles for org '%s': %s", *org.Name, strings.Join(both.List(), ", "))
 		}
 
-		if !admins.Has("rlenferink-bot") {
-			t.Errorf("rlenferink-bot must be an admin")
-		}
-
-		if org.BillingEmail != nil {
-			t.Errorf("billing_email must be unset")
+		if !admins.Has("thales-robot") {
+			t.Errorf("thales-robot must be an admin")
 		}
 
 		if err := testDuplicates(admins); err != nil {

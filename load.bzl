@@ -1,5 +1,4 @@
-#!/usr/bin/env bash
-# Copyright 2017 The Kubernetes Authors.
+# Copyright 2019 The Kubernetes Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,10 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set -o errexit
-set -o nounset
-set -o pipefail
-set -o xtrace
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 
-cd "$(git rev-parse --show-toplevel)"
-bazel test //:verify-all
+def repositories():
+    git_repository(
+        name = "io_k8s_repo_infra",
+        commit = "db6ceb5f992254db76af7c25db2edc5469b5ea82",
+        remote = "https://github.com/kubernetes/repo-infra.git",
+        shallow_since = "1570128715 -0700",
+    )

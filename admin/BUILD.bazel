@@ -11,7 +11,9 @@ sh_binary(
         "--fix-org-members",
         "--fix-teams",
         "--fix-team-members",
+        "--min-admins=2",
         "--required-admins=rlenferink",
+        "--required-admins=rlenferink-bot",
     ],
     data = [
         "//config:config.yaml",
