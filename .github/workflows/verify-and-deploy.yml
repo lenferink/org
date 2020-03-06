@@ -3,7 +3,7 @@ name: config
 on: [push]
 
 jobs:
-  verify:
+  deploy:
     runs-on: ubuntu-18.04
     env:
       BAZEL_VERSION: 1.2.1
