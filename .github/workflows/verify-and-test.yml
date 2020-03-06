@@ -8,7 +8,7 @@ jobs:
     env:
       BAZEL_VERSION: 1.2.1
       REPO_NAME: github.com/lenferink/org
-      GO_PATH: /go
+      GOPATH: /go
     timeout-minutes: 60
     steps:
     - name: Checkout source code
@@ -19,8 +19,8 @@ jobs:
         sudo add-apt-repository ppa:longsleep/golang-backports
         sudo apt update
         sudo apt install golang-go
-        sudo mkdir $GO_PATH
-        export PATH=$GO_PATH/bin:$PATH
+        sudo mkdir $GOPATH
+        export PATH=$GOPATH/bin:$PATH
         # Setup Go environment
         mkdir -p $GOPATH/src/$(dirname $REPO_NAME)
         ln -svf $CI_PROJECT_DIR $GOPATH/src/$REPO_NAME
