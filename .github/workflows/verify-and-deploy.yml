@@ -26,15 +26,21 @@ jobs:
         # Store GitHub token
         echo -e "$GH_TOKEN" > /tmp/token.gh
         # Install Bazel
-        sudo apt-get update && sudo apt install -y wget g++ unzip zip
-        wget https://github.com/bazelbuild/bazel/releases/download/$BAZEL_VERSION/bazel-$BAZEL_VERSION-installer-linux-x86_64.sh
-        chmod +x bazel-$BAZEL_VERSION-installer-linux-x86_64.sh
-        sudo ./bazel-$BAZEL_VERSION-installer-linux-x86_64.sh
-        bazel version
+        #sudo apt-get update && sudo apt install -y wget g++ unzip zip
+        #wget https://github.com/bazelbuild/bazel/releases/download/$BAZEL_VERSION/bazel-$BAZEL_VERSION-installer-linux-x86_64.sh
+        #chmod +x bazel-$BAZEL_VERSION-installer-linux-x86_64.sh
+        #sudo ./bazel-$BAZEL_VERSION-installer-linux-x86_64.sh
+        #bazel version
         # Setup Python 3
         sudo apt-get install -y python3
         sudo unlink /usr/bin/python
         sudo ln -s /usr/bin/python3 /usr/bin/python
+    - name: Setup Bazel
+      uses: abhinavsingh/setup-bazel@v3
+      with:
+        version: 1.2.1
+    - name: Test Bazel
+      run: bazel version
     - name: Verify
       run: ./hack/verify-all.sh
     - name: Deploy
