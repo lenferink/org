@@ -157,8 +157,8 @@ func TestAllOrgs(t *testing.T) {
 			t.Errorf("users in both org admin and member roles for org '%s': %s", *org.Name, strings.Join(both.List(), ", "))
 		}
 
-		if !admins.Has("thales-robot") {
-			t.Errorf("thales-robot must be an admin")
+		if !admins.Has("rlenferink-bot") {
+			t.Errorf("rlenferink-bot must be an admin")
 		}
 
 		if err := testDuplicates(admins); err != nil {
