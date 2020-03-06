@@ -28,7 +28,7 @@ jobs:
         # Setup Go environment
         sudo mkdir -p $GOPATH/src/$(dirname $REPO_NAME)
         ls -l $GOPATH/src/$(dirname $REPO_NAME)
-        sudo ln -svf $GITHUB_WORKSPACE/org $GOPATH/src/$REPO_NAME
+        sudo ln -svf $GITHUB_WORKSPACE $GOPATH/src/$REPO_NAME
         cd $GOPATH/src/$REPO_NAME
         # Store GitHub token
         echo -e "$GH_TOKEN" > /tmp/token.gh
