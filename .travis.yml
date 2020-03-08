@@ -28,7 +28,7 @@ before_script:
 
 jobs:
   include:
-    - stage: "Tests"
+    - stage: tests
       name: "config-test"
       script: echo test1
     - name: "verify-all"
