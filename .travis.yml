@@ -1,0 +1,30 @@
+language: go
+
+go:
+- "1.14"
+
+os: linux
+
+before_install:
+    # Install Bazel
+  - apt-get update && apt install -y wget g++ unzip zip
+  - wget https://github.com/bazelbuild/bazel/releases/download/$BAZEL_VERSION/bazel-$BAZEL_VERSION-installer-linux-x86_64.sh
+  - chmod +x bazel-$BAZEL_VERSION-installer-linux-x86_64.sh
+  - ./bazel-$BAZEL_VERSION-installer-linux-x86_64.sh
+  - bazel version
+    # Setup Python 3
+  - apt-get install -y python3
+  - unlink /usr/bin/python
+  - ln -s /usr/bin/python3 /usr/bin/python
+
+before_script:
+    # Store GitHub token
+  - echo -e "$GH_TOKEN" > /tmp/token.gh
+
+script:
+  - go version
+
+after_script:
+  - rm -f /tmp/token.gh
+
+
