@@ -26,6 +26,17 @@ before_script:
     # Store GitHub token
   - echo -e "$GH_TOKEN" > /tmp/token.gh
 
+jobs:
+  include:
+    - stage: "Tests"
+      name: "config-test"
+      script: echo test1
+    - name: "verify-all"
+      script: echo test2
+    - stage: deploy
+      name: "deploy"
+      script: echo deploy
+
 script:
   - go version
 
