@@ -36,6 +36,9 @@ jobs:
       name: "deploy"
       if: branch = master
       script: bazel run //admin:update -- --github-token-path /tmp/token.gh --confirm
+  exclude:
+    - stage: "Deploy"
+      env: TRAVIS_PULL_REQUEST=true
 
 script:
   - go version
