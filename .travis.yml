@@ -34,6 +34,7 @@ jobs:
       script: bazel test //:verify-all
     - stage: "Deploy"
       name: "deploy"
+      if: branch = master
       script: bazel run //admin:update -- --github-token-path /tmp/token.gh --confirm
 
 script:
