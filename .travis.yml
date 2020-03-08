@@ -6,6 +6,10 @@ go:
 
 os: linux
 
+env:
+    global:
+        - BAZEL_VERSION: 1.2.1
+
 before_install:
     # Install Bazel
   - sudo apt-get update && sudo apt install -y wget g++ unzip zip
