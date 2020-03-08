@@ -1,49 +1,37 @@
 language: go
-
 go:
-- "1.14"
-
+- '1.14'
 os: linux
-
 env:
-    global:
-        - BAZEL_VERSION: 1.2.1
-
+  global:
+  - BAZEL_VERSION: 1.2.1
+  - secure: aj7cAqSpxQU7eoN/d++5qKqtYSjIPzFp9uZnlIQWSaAe2JamR7/sj+lgKOgPQ/UgCHhc1d2YMaxaJKpktcJRhVwoa0m7K4ufPJoqkMAT0Pfqo8aYyLLra5Ng6TotVQ/3pGL7XYjL2O7DPrOatkYq7DlSGUJXBamUHV6W7zQ2rPr47Yj6VO760htieApGtHabqwygyK0zJqVeTIVWUAk4vX7tDYjB+pJifWp3DZr8DIpuTJ+di48StPT3eMIJDdjDf9CkMGNpQfYf3kDCFnwNlUJxJ+WQMchlFBQaPV40KXOkMtMzB90D6IfqtoDT69d3sW06mOr4RGPZ8YfcYa8rhbIgCiH9b9x8W6m7rhyiNupkSc0nORD+FY1/lHAEMpPMeVfNwotkWuo3mmB0rhG5i1mOwb5n16Xo3CicCA2s9nSvjpkt5YKJFa0mXxoLD4vGfBCyvY5mPc+fbWqfwBYdQq1hoXcmFeJEjxdt6nr37a9+AyObWq6uj0G8n6cuQxQulp7ByFYBDZVEZ6rS/NZ231pE1zS7GQ/FWYnaSciNaWLIA3paI8xMbYJfYUVkHDY1ZA6UEqCSFY/cYA/OyLraanSwtifTOqGu7zWPk6AA2yAa8gahHeNtLZ2qawUDDqSjCTpISHh+UwlJNMZ/rFuq7sy0aosJU+gwVcG+ju9yvCk=
 before_install:
-    # Install Bazel
-  - sudo apt-get update && sudo apt install -y wget g++ unzip zip
-  - wget https://github.com/bazelbuild/bazel/releases/download/$BAZEL_VERSION/bazel-$BAZEL_VERSION-installer-linux-x86_64.sh
-  - chmod +x bazel-$BAZEL_VERSION-installer-linux-x86_64.sh
-  - sudo ./bazel-$BAZEL_VERSION-installer-linux-x86_64.sh
-  - bazel version
-    # Setup Python 3
-  - sudo apt-get install -y python3
-  - sudo unlink /usr/bin/python
-  - sudo ln -s /usr/bin/python3 /usr/bin/python
-
+- sudo apt-get update && sudo apt install -y wget g++ unzip zip
+- wget https://github.com/bazelbuild/bazel/releases/download/$BAZEL_VERSION/bazel-$BAZEL_VERSION-installer-linux-x86_64.sh
+- chmod +x bazel-$BAZEL_VERSION-installer-linux-x86_64.sh
+- sudo ./bazel-$BAZEL_VERSION-installer-linux-x86_64.sh
+- bazel version
+- sudo apt-get install -y python3
+- sudo unlink /usr/bin/python
+- sudo ln -s /usr/bin/python3 /usr/bin/python
 before_script:
-    # Store GitHub token
-  - echo -e "$GH_TOKEN" > /tmp/token.gh
-
+- echo -e "$GH_TOKEN" > /tmp/token.gh
 jobs:
   include:
-    - stage: "Tests"
-      name: "config-test"
-      script: bazel test //config:all
-    - name: "verify-all"
-      script: bazel test //:verify-all
-    - stage: "Deploy"
-      name: "deploy"
-      if: branch = master
-      script: bazel run //admin:update -- --github-token-path /tmp/token.gh --confirm
+  - stage: Tests
+    name: config-test
+    script: bazel test //config:all
+  - name: verify-all
+    script: bazel test //:verify-all
+  - stage: Deploy
+    name: deploy
+    if: branch = master
+    script: bazel run //admin:update -- --github-token-path /tmp/token.gh --confirm
   exclude:
-    - stage: "Deploy"
-      env: TRAVIS_PULL_REQUEST=true
-
+  - stage: Deploy
+    env: TRAVIS_PULL_REQUEST=true
 script:
-  - go version
-
+- go version
 after_script:
-  - rm -f /tmp/token.gh
-
-
+- rm -f /tmp/token.gh
