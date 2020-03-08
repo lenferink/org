@@ -28,12 +28,12 @@ before_script:
 
 jobs:
   include:
-    - stage: tests
+    - stage: "Tests"
       name: "config-test"
       script: echo test1
     - name: "verify-all"
       script: echo test2
-    - stage: deploy
+    - stage: "Deploy"
       name: "deploy"
       script: echo deploy
 
