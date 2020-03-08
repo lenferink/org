@@ -29,12 +29,12 @@ jobs:
   include:
     - stage: "Tests"
       name: "config-test"
-      script: echo test1
+      script: bazel test //config:all
     - name: "verify-all"
-      script: echo test2
+      script: bazel test //:verify-all
     - stage: "Deploy"
       name: "deploy"
-      script: echo deploy
+      script: bazel run //admin:update -- --github-token-path /tmp/token.gh --confirm
 
 script:
   - go version
