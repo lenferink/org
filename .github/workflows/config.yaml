@@ -3,15 +3,23 @@ name: config
 on: [push, pull_request]
 
 jobs:
+  verify-all:
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Checkout source code
+      uses: actions/checkout@master
+    - name: TEST 1
+      run: |
+        echo jahoe
   deploy:
     runs-on: ubuntu-18.04
     timeout-minutes: 60
-    needs: [test-config, verify-all]
+    needs: [verify-all]
     if: github.ref == 'refs/heads/master' && github.event == 'push'
     steps:
     - name: Checkout source code
       uses: actions/checkout@master
-    - name: TEST
+    - name: TEST 2
       run: |
         echo jahoe
 
