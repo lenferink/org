@@ -9,7 +9,8 @@ jobs:
     steps:
     - name: Checkout source code
       uses: actions/checkout@master
-    - uses: actions/setup-go@v2-beta
+    - name: Setup Go
+      uses: actions/setup-go@v2-beta
       with:
         go-version: '^1.14.0' # The Go version to download (if necessary) and use. 
     - name: Setup Bazel
@@ -24,7 +25,8 @@ jobs:
     steps:
     - name: Checkout source code
       uses: actions/checkout@master
-    - uses: actions/setup-go@v2-beta
+    - name: Setup Go
+      uses: actions/setup-go@v2-beta
       with:
         go-version: '^1.14.0' # The Go version to download (if necessary) and use. 
     - name: Setup Bazel
@@ -46,7 +48,8 @@ jobs:
     steps:
     - name: Checkout source code
       uses: actions/checkout@master
-    - uses: actions/setup-go@v2-beta
+    - name: Setup Go
+      uses: actions/setup-go@v2-beta
       with:
         go-version: '^1.14.0' # The Go version to download (if necessary) and use. 
     - name: Setup Bazel
