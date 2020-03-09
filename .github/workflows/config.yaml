@@ -15,11 +15,11 @@ jobs:
     runs-on: ubuntu-18.04
     timeout-minutes: 60
     needs: [verify-all]
-    if: github.ref == 'refs/heads/master' && github.event == 'push'
+    if: github.ref == 'refs/heads/master'
     steps:
     - name: Checkout source code
       uses: actions/checkout@master
     - name: TEST 2
       run: |
-        echo jahoe
+        echo jahoe - ${{github.event}}
 
