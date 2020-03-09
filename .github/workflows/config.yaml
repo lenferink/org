@@ -42,7 +42,7 @@ jobs:
     runs-on: ubuntu-18.04
     timeout-minutes: 60
     needs: [test-config, verify-all]
-    if: (github.ref == 'refs/heads/master' && github.event == 'push')
+    if: github.ref == 'refs/heads/master' && github.event == 'push'
     steps:
     - name: Checkout source code
       uses: actions/checkout@master
