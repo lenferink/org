@@ -1,0 +1,67 @@
+name: config
+
+on: [push]
+
+jobs:
+  test-config:
+    runs-on: ubuntu-18.04
+    timeout-minutes: 60
+    steps:
+    - name: Checkout source code
+      uses: actions/checkout@master
+    - name: Setup Go
+      uses: actions/setup-go@v2-beta
+      with:
+        go-version: '^1.14.0' # The Go version to download (if necessary) and use. 
+    - name: Setup Bazel
+      uses: abhinavsingh/setup-bazel@v3
+      with:
+        version: 1.2.1
+    - name: Config test
+      run: bazel test //config:all
+  verify-all:
+    runs-on: ubuntu-18.04
+    timeout-minutes: 60
+    steps:
+    - name: Checkout source code
+      uses: actions/checkout@master
+    - name: Setup Go
+      uses: actions/setup-go@v2-beta
+      with:
+        go-version: '^1.14.0' # The Go version to download (if necessary) and use. 
+    - name: Setup Bazel
+      uses: abhinavsingh/setup-bazel@v3
+      with:
+        version: 1.2.1
+    - name: Setup Python
+      run: |
+        sudo apt-get install -y python3
+        sudo unlink /usr/bin/python
+        sudo ln -s /usr/bin/python3 /usr/bin/python 
+    - name: Verify all
+      run: bazel test //:verify-all
+  deploy:
+    runs-on: ubuntu-18.04
+    timeout-minutes: 60
+    needs: [test-config, verify-all]
+    if: github.ref == 'refs/heads/master'
+    steps:
+    - name: Checkout source code
+      uses: actions/checkout@master
+    - name: Setup Go
+      uses: actions/setup-go@v2-beta
+      with:
+        go-version: '^1.14.0' # The Go version to download (if necessary) and use. 
+    - name: Setup Bazel
+      uses: abhinavsingh/setup-bazel@v3
+      with:
+        version: 1.2.1
+    - name: Setup token
+      run: echo -e $GH_TOKEN > /tmp/token.gh
+      env: # Or as an environment variable
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
+    - name: Deploy
+      run: bazel run //admin:update -- --github-token-path /tmp/token.gh --confirm
+    - name: Cleanup token
+      run: rm -f /tmp/token.gh
+
