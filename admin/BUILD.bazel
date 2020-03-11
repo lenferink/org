@@ -9,6 +9,7 @@ sh_binary(
         "$(location //config:config.yaml)",
         "--fix-org",
         "--fix-org-members",
+        "--fix-repos",
         "--fix-teams",
         "--fix-team-members",
         "--min-admins=2",

@@ -9,3 +9,10 @@ admins:
 - rlenferink-bot
 members:
 - rlenferink-test
+repos:
+  org:
+    description: ' Meta configuration for Github Org'
+    has_projects: true
+  test:
+    has_projects: true
+
