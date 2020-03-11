@@ -12,4 +12,6 @@ members:
 repos:
   org:
   test:
+  test-repo-A:
+  test-repo-b:
 
