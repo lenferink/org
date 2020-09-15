@@ -14,4 +14,6 @@ repos:
   test:
   test-repo-A:
   test-repo-b:
+  pipeline-nexus-plugin:
+    forks_url: https://github.com/jenkinsci/pipeline-global-lib-nexus-plugin
 
